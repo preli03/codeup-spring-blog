@@ -1,17 +1,22 @@
 package mireles.codeupspringblog.controllers;
 
+import mireles.codeupspringblog.Repository.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/posts")
 public class PostController {
 
+@Autowired
+public PostController() {
 
+}
 
     public static class Post {
         private String title;
@@ -63,4 +68,14 @@ public class PostController {
 
         return "posts/show";
     }
+    @PostMapping("/posts/create")
+    public String createPost(@ModelAttribute("post") Post post) {
+        // Save the post to the database using PostRepository
+        PostRepository.save(post);
+
+        // Redirect the user to the posts index page
+        return "redirect:/posts";
+    }
+
+
 }
