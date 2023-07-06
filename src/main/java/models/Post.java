@@ -1,16 +1,40 @@
 package models;
 
 import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+
+
 
 @Entity
-@Table(name = "post")
+@Table(name = "posts")
 public class Post {
     @Id
-    private Long id;
-private String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    
+    @Column(nullable = false)
     private String title;
 
-    private String content;
+    
+    @Column(length = 1024)
+    private String body;
+
+    public Post(String id, String title, String body) {
+    }
+
+
+    public String getTitle(){
+        return title;
+    }
     public void setId(Long id) {
         this.id = id;
     }
@@ -18,8 +42,6 @@ private String name;
     public Long getId() {
         return id;
     }
-
-
 }
 /*
 @Entity
