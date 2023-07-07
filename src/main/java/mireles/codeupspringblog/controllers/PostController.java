@@ -7,21 +7,49 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
     private PostRepository postDao;
 
-    @GetMapping("/post")
+    @GetMapping("")
     public String posts(Model model) {
-        model.addAttribute("posts", new Post("id", "title", "body"));
+        List<Post> posts = postDao.findAll();
 
-        return "posts/index";
+        model.addAttribute("posts",posts);
+        return "/posts/show";
     }
 
-    public static class Post {
-        public Post(String id, String title, String body) {
-
+    @GetMapping("/{id}")
+    public String showSinglePost(@PathVariable Long id, Model model){
+        // find the desired post in the db
+        Optional<Post> optionalPost = postDao.findById(id);
+        if(optionalPost.isEmpty()) {
+            System.out.printf("Post with id " + id + " not found!");
+            return "home";
         }
+
+        // if we get here, then we found the post. so just open up the optional
+        model.addAttribute("post", optionalPost.get());
+        return "/posts/index";
+    }
+
+    @GetMapping("/create")
+    public String showCreate() {
+        return "/posts/create";
+    }
+
+    @PostMapping("/create")
+    public String doCreate(@RequestParam String title, @RequestParam String body) {
+        Post post = new Post();
+        post.setTitle(title);
+        post.setBody(body);
+
+        postDao.save(post);
+
+        return "redirect:/posts";
     }
 }
