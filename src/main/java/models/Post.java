@@ -26,7 +26,10 @@ public class Post {
     @Column(length = 1024, nullable = false)
     private String body;
 
-    public void setUser(User user) {
-    }
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
+
 }
 

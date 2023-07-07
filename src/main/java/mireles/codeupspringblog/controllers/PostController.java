@@ -18,6 +18,7 @@ import java.util.Optional;
 
 public class PostController {
     private PostRepository postDao;
+    private PostRepository UserDao;
     private PostRepository postRepository;
     private UserRepository userRepository;
 
@@ -53,11 +54,14 @@ public class PostController {
         Post post = new Post();
         post.setTitle(title);
         post.setBody(body);
-
+User loggedInUser = userDao.findById(1L).get();
         postDao.save(post);
 
         return "redirect:/posts";
     }
+
+
+
     @PostMapping("/posts/create")
     public String createPost(@RequestParam("title") String title,
                              @RequestParam("body") String body) {
@@ -70,7 +74,6 @@ public class PostController {
         User user = (User) userRepository.findAll().iterator().next();
 
         // Assign the user to the post
-        post.setUser(user);
 
         // Save the post to the database
         postRepository.save(post);
@@ -79,7 +82,9 @@ public class PostController {
     }
 
     @Autowired
-    public PostController(UserRepository userRepository) {
+    public PostController(UserRepository userRepository, PostRepository postDao, PostRepository userDao) {
+        this.postDao = postDao;
+        UserDao = userDao;
     }
     public PostController(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
