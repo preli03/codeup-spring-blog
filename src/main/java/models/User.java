@@ -1,30 +1,45 @@
 package models;
 
-public class User {
 
-    private long id;
+import jakarta.persistence.*;
+
+@Entity
+@Table( name = "user")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
-    // Constructor
-    public User(long id, String username, String email, String password) {
-        this.id = id;
+    // Constructors
+
+    public User() {
+    }
+
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    // Getter and Setter for id
-    public long getId() {
+    // Getters and Setters
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    // Getter and Setter for username
     public String getUsername() {
         return username;
     }
@@ -33,7 +48,6 @@ public class User {
         this.username = username;
     }
 
-    // Getter and Setter for email
     public String getEmail() {
         return email;
     }
@@ -42,7 +56,6 @@ public class User {
         this.email = email;
     }
 
-    // Getter and Setter for password
     public String getPassword() {
         return password;
     }
