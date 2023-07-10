@@ -1,5 +1,5 @@
 package mireles.codeupspringblog.Repository;
-import models.Post;
+import mireles.codeupspringblog.models.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

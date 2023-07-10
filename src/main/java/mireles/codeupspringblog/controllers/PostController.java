@@ -3,9 +3,8 @@ package mireles.codeupspringblog.controllers;
 import mireles.codeupspringblog.Repository.PostRepository;
 
 import mireles.codeupspringblog.Repository.UserRepository;
-import models.Post;
-import models.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import mireles.codeupspringblog.models.Post;
+import mireles.codeupspringblog.models.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +16,12 @@ import java.util.Optional;
 @Controller
 
 public class PostController {
-    private PostRepository postDao;
-    private PostRepository UserDao;
     private PostRepository postRepository;
     private UserRepository userRepository;
 
     @GetMapping("")
     public String posts(Model model) {
-        List<Post> posts = postDao.findAll();
+        List<Post> posts = postRepository.findAll();
 
         model.addAttribute("posts",posts);
         return "/posts/show";
@@ -33,7 +30,7 @@ public class PostController {
     @GetMapping("/{id}")
     public String showSinglePost(@PathVariable Long id, Model model){
         // find the desired post in the db
-        Optional<Post> optionalPost = postDao.findById(id);
+        Optional<Post> optionalPost = postRepository.findById(id);
         if(optionalPost.isEmpty()) {
             System.out.printf("Post with id " + id + " not found!");
             return "home";
@@ -54,8 +51,8 @@ public class PostController {
         Post post = new Post();
         post.setTitle(title);
         post.setBody(body);
-User loggedInUser = userDao.findById(1L).get();
-        postDao.save(post);
+User loggedInUser = userRepository.findById(1L).get();
+        postRepository.save(post);
 
         return "redirect:/posts";
     }
@@ -79,12 +76,6 @@ User loggedInUser = userDao.findById(1L).get();
         postRepository.save(post);
 
         return "redirect:/posts";
-    }
-
-    @Autowired
-    public PostController(UserRepository userRepository, PostRepository postDao, PostRepository userDao) {
-        this.postDao = postDao;
-        UserDao = userDao;
     }
     public PostController(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;

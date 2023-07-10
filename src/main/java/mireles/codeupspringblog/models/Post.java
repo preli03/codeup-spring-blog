@@ -1,4 +1,4 @@
-package models;
+package mireles.codeupspringblog.models;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package models;
+package mireles.codeupspringblog.models;
 
 
 import jakarta.persistence.*;
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table( name = "user")
+@Table( name = "blog_users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
