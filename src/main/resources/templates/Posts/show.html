@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Show Post</title>
+  <meta charset="UTF-8">
+  <title>Title</title>
 </head>
 <body>
-<h1>Show Post</h1>
-<h2 th:text="${post.title}"></h2>
-<p th:text="${post.body}"></p>
+<h1 th:text="${post.getTitle()}"></h1>
+<h1 th:text="${post.getBody()}"></h1>
+<h1 th:text="${post.getCreator().getUsername()}"></h1>
 </body>
 </html>

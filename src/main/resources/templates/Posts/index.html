@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>All Posts</title>
+  <meta charset="UTF-8">
+  <title>Title</title>
 </head>
 <body>
-<h1>All Posts</h1>
-<ul>
-  <li th:each="post : ${posts}">
-    <a th:href="@{/posts/{title}(title=${post.title})}" th:text="${post.title}"></a>
-  </li>
-</ul>
+<div th:each="post : ${posts}">
+  <p th:text="${post.getTitle()}" />
+  <p th:text="${post.getBody()}" />
+</div>
 </body>
 </html>
