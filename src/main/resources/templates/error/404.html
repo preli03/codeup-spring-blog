@@ -9,6 +9,30 @@
 <nav th:insert="partials/navbar :: nav"></nav>
 <header class="container center-align">
     <h1>404: Page Not Found</h1>
+    <div>
+        <button class="upload">Upload file</button>
+    </div>
+    <div>
+        <img width="200" height="200" class="logo" />
+    </div>
 </header>
 </body>
+
+<script src="//static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
+<script>
+    const button = document.querySelector('.upload')
+    const image = document.querySelector('.logo')
+    button.addEventListener('click', () => {
+        const apiKey = 'YOUR_API_KEY'
+        const client = filestack.init(apiKey);
+        const options = {
+            onUploadDone: (uploadResponse) => {
+                console.log('onUploadDone', uploadResponse)
+                image.setAttribute('src', uploadResponse.filesUploaded[0].url)
+            }
+        };
+        client.picker(options).open()
+    })
+
+</script>
 </html>
