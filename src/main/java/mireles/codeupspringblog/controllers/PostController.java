@@ -5,6 +5,7 @@ import mireles.codeupspringblog.Repository.UserRepository;
 import mireles.codeupspringblog.models.EmailService;
 import mireles.codeupspringblog.models.Post;
 import mireles.codeupspringblog.models.User;
+import mireles.codeupspringblog.services.Authorization;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,10 @@ public class PostController {
 
         @GetMapping("")
         public String posts(Model model){
+
+            User loggedInUser = Authorization.getLoggedInUser();
+            model.addAttribute("loggedInUser", loggedInUser);
+
             List<Post> posts = postDao.findAll();
 
             model.addAttribute("posts",posts);
@@ -31,33 +36,51 @@ public class PostController {
 
         @GetMapping("/{id}")
         public String showSinglePost(@PathVariable Long id, Model model){
-            // find the desired post in the db
+            User loggedInUser = Authorization.getLoggedInUser();
+            model.addAttribute("loggedInUser", loggedInUser);
             Optional<Post> optionalPost = postDao.findById(id);
             if(optionalPost.isEmpty()) {
                 System.out.printf("Post with id " + id + " not found!");
                 return "home";
             }
 
-            // if we get here, then we found the post. so just open up the optional
             model.addAttribute("post", optionalPost.get());
             return "/posts/show";
         }
 
         @GetMapping("/create")
-        public String showCreate() {
+        public String showCreate(Model model) {
+            User loggedInUser = Authorization.getLoggedInUser();
+            if(loggedInUser.getId() == 0) {
+                return "redirect:/login";
+            }
+
+            model.addAttribute("loggedInUser", loggedInUser);
+
+            model.addAttribute("newPost", new Post());
             return "/posts/create";
         }
 
         @PostMapping("/create")
         public String doCreate(@RequestParam String title, @RequestParam String body) {
+            User loggedInUser = Authorization.getLoggedInUser();
+            if(loggedInUser.getId() == 0) {
+                return "redirect:/login";
+            }
+
             Post post = new Post();
-            post.setTitle(title);
-            post.setBody(body);
-            User loggedInUser = userDao.findById(1L).get();
             post.setCreator(loggedInUser);
-            emailService.prepareAndSend(post,title,body);
             postDao.save(post);
 
             return "redirect:/posts";
         }
+    @GetMapping("/{id}/edit")
+    public String showEdit(@PathVariable Long id, Model model) {
+        User loggedInUser = Authorization.getLoggedInUser();
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        Post postToEdit = postDao.getReferenceById(id);
+        model.addAttribute("newPost", postToEdit);
+        return "/posts/create";
+    }
     }

@@ -31,4 +31,8 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL)
 private List<Post> posts;
+
+    public User(User user) {
+
+    }
 }
